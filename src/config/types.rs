@@ -130,24 +130,42 @@ pub struct PromptTokensDetails {
 // Raw usage data from different LLM providers (flexible parsing)
 #[derive(Debug, Clone, Deserialize, Serialize, Default)]
 pub struct RawUsage {
-    // Common input token naming variants
-    #[serde(default, alias = "prompt_tokens")]
+    // Anthropic-style input tokens
+    #[serde(default)]
     pub input_tokens: Option<u32>,
 
-    // Common output token naming variants
-    #[serde(default, alias = "completion_tokens")]
+    // OpenAI-style input tokens (separate field to handle both formats)
+    #[serde(default)]
+    pub prompt_tokens: Option<u32>,
+
+    // Anthropic-style output tokens
+    #[serde(default)]
     pub output_tokens: Option<u32>,
+
+    // OpenAI-style output tokens (separate field to handle both formats)
+    #[serde(default)]
+    pub completion_tokens: Option<u32>,
 
     // Total tokens (some providers only provide this)
     #[serde(default)]
     pub total_tokens: Option<u32>,
 
     // Anthropic-style cache fields
-    #[serde(default, alias = "cache_creation_prompt_tokens")]
+    #[serde(default)]
     pub cache_creation_input_tokens: Option<u32>,
 
-    #[serde(default, alias = "cache_read_prompt_tokens")]
+    #[serde(default)]
     pub cache_read_input_tokens: Option<u32>,
+
+    // OpenAI-style cache fields (separate fields to handle both formats)
+    #[serde(default)]
+    pub cache_creation_prompt_tokens: Option<u32>,
+
+    #[serde(default)]
+    pub cache_read_prompt_tokens: Option<u32>,
+
+    #[serde(default)]
+    pub cached_tokens: Option<u32>,
 
     // OpenAI-style nested details
     #[serde(default)]
@@ -303,42 +321,54 @@ impl RawUsage {
         let mut result = NormalizedUsage::default();
         let mut sources = Vec::new();
 
-        // Collect available raw data fields
+        // Collect available raw data fields and merge tokens with Anthropic priority
         let mut available_fields = Vec::new();
-        if self.input_tokens.is_some() {
+
+        // Merge input tokens (priority: input_tokens > prompt_tokens)
+        let input = self.input_tokens.or(self.prompt_tokens).unwrap_or(0);
+        if input > 0 {
             available_fields.push("input_tokens".to_string());
         }
-        if self.output_tokens.is_some() {
+
+        // Merge output tokens (priority: output_tokens > completion_tokens)
+        let output = self.output_tokens.or(self.completion_tokens).unwrap_or(0);
+        if output > 0 {
             available_fields.push("output_tokens".to_string());
         }
-        if self.total_tokens.is_some() {
+
+        let total = self.total_tokens.unwrap_or(0);
+        if total > 0 {
             available_fields.push("total_tokens".to_string());
         }
-        if self.cache_creation_input_tokens.is_some() {
+
+        // Merge cache creation tokens (priority: Anthropic > OpenAI)
+        let cache_creation = self
+            .cache_creation_input_tokens
+            .or(self.cache_creation_prompt_tokens)
+            .unwrap_or(0);
+        if cache_creation > 0 {
             available_fields.push("cache_creation".to_string());
         }
-        if self.cache_read_input_tokens.is_some() {
-            available_fields.push("cache_read".to_string());
-        }
 
-        result.raw_data_available = available_fields;
-
-        // Extract directly available values
-        let input = self.input_tokens.unwrap_or(0);
-        let output = self.output_tokens.unwrap_or(0);
-        let total = self.total_tokens.unwrap_or(0);
-
-        // Handle cache tokens with fallback to OpenAI nested format
+        // Merge cache read tokens (priority: Anthropic > OpenAI > nested format)
         let cache_read = self
             .cache_read_input_tokens
+            .or(self.cache_read_prompt_tokens)
+            .or(self.cached_tokens)
             .or_else(|| {
+                // Fallback to OpenAI nested format
                 self.prompt_tokens_details
                     .as_ref()
                     .and_then(|d| d.cached_tokens)
             })
             .unwrap_or(0);
+        if cache_read > 0 {
+            available_fields.push("cache_read".to_string());
+        }
 
-        let cache_creation = self.cache_creation_input_tokens.unwrap_or(0);
+        result.raw_data_available = available_fields;
+
+        // Use merged cache values (already calculated above with Anthropic priority)
 
         // Token calculation logic - prioritize total_tokens for OpenAI format
         let total_value = if total > 0 {

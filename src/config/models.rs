@@ -4,7 +4,6 @@ use std::path::Path;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ModelConfig {
-    pub default_context_limit: u32,
     #[serde(rename = "models")]
     pub model_entries: Vec<ModelEntry>,
 }
@@ -26,7 +25,17 @@ impl ModelConfig {
 
     /// Load model configuration with fallback locations
     pub fn load() -> Self {
-        // Try loading from user config directory first
+        let mut model_config = Self::default();
+
+        // First, try to create default models.toml if it doesn't exist
+        if let Some(home_dir) = dirs::home_dir() {
+            let user_models_path = home_dir.join(".claude").join("ccline").join("models.toml");
+            if !user_models_path.exists() {
+                let _ = Self::create_default_file(&user_models_path);
+            }
+        }
+
+        // Try loading from user config directory first, then local
         let config_paths = [
             dirs::home_dir().map(|d| d.join(".claude").join("ccline").join("models.toml")),
             Some(Path::new("models.toml").to_path_buf()),
@@ -35,13 +44,17 @@ impl ModelConfig {
         for path in config_paths.iter().flatten() {
             if path.exists() {
                 if let Ok(config) = Self::load_from_file(path) {
-                    return config;
+                    // Prepend external models to built-in ones for priority
+                    let mut merged_entries = config.model_entries;
+                    merged_entries.extend(model_config.model_entries);
+                    model_config.model_entries = merged_entries;
+                    return model_config;
                 }
             }
         }
 
         // Fallback to default configuration if no file found
-        Self::default()
+        model_config
     }
 
     /// Get context limit for a model based on ID pattern matching
@@ -49,23 +62,14 @@ impl ModelConfig {
     pub fn get_context_limit(&self, model_id: &str) -> u32 {
         let model_lower = model_id.to_lowercase();
 
-        // First check external config if it exists
-        if let Ok(external_config) = Self::load_external_config() {
-            for entry in &external_config.model_entries {
-                if model_lower.contains(&entry.pattern.to_lowercase()) {
-                    return entry.context_limit;
-                }
-            }
-        }
-
-        // Fall back to built-in config
+        // Check model entries
         for entry in &self.model_entries {
             if model_lower.contains(&entry.pattern.to_lowercase()) {
                 return entry.context_limit;
             }
         }
 
-        self.default_context_limit
+        200_000
     }
 
     /// Get display name for a model based on ID pattern matching
@@ -74,16 +78,7 @@ impl ModelConfig {
     pub fn get_display_name(&self, model_id: &str) -> Option<String> {
         let model_lower = model_id.to_lowercase();
 
-        // First check external config if it exists
-        if let Ok(external_config) = Self::load_external_config() {
-            for entry in &external_config.model_entries {
-                if model_lower.contains(&entry.pattern.to_lowercase()) {
-                    return Some(entry.display_name.clone());
-                }
-            }
-        }
-
-        // Fall back to built-in config
+        // Check model entries
         for entry in &self.model_entries {
             if model_lower.contains(&entry.pattern.to_lowercase()) {
                 return Some(entry.display_name.clone());
@@ -93,27 +88,10 @@ impl ModelConfig {
         None
     }
 
-    /// Load external configuration file only
-    fn load_external_config() -> Result<Self, Box<dyn std::error::Error>> {
-        let config_paths = [
-            dirs::home_dir().map(|d| d.join(".claude").join("ccline").join("models.toml")),
-            Some(Path::new("models.toml").to_path_buf()),
-        ];
-
-        for path in config_paths.iter().flatten() {
-            if path.exists() {
-                return Self::load_from_file(path);
-            }
-        }
-
-        Err("No external config file found".into())
-    }
-
     /// Create default model configuration file with minimal template
     pub fn create_default_file<P: AsRef<Path>>(path: P) -> Result<(), Box<dyn std::error::Error>> {
         // Create a minimal template config (not the full fallback config)
         let template_config = Self {
-            default_context_limit: 200_000,
             model_entries: vec![], // Empty - just provide the structure
         };
 
@@ -152,7 +130,6 @@ impl ModelConfig {
 impl Default for ModelConfig {
     fn default() -> Self {
         Self {
-            default_context_limit: 200_000,
             model_entries: vec![
                 // 1M context models (put first for priority matching)
                 ModelEntry {

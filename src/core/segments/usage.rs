@@ -25,29 +25,49 @@ impl Segment for UsageSegment {
         // Dynamically determine context limit based on current model ID
         let context_limit = Self::get_context_limit_for_model(&input.model.id);
 
-        let context_used_token = parse_transcript_usage(&input.transcript_path);
-        let context_used_rate = (context_used_token as f64 / context_limit as f64) * 100.0;
+        let context_used_token_opt = parse_transcript_usage(&input.transcript_path);
 
-        let percentage_display = if context_used_rate.fract() == 0.0 {
-            format!("{:.0}%", context_used_rate)
-        } else {
-            format!("{:.1}%", context_used_rate)
-        };
+        let (percentage_display, tokens_display) = match context_used_token_opt {
+            Some(context_used_token) => {
+                let context_used_rate = (context_used_token as f64 / context_limit as f64) * 100.0;
 
-        let tokens_display = if context_used_token >= 1000 {
-            let k_value = context_used_token as f64 / 1000.0;
-            if k_value.fract() == 0.0 {
-                format!("{}k", k_value as u32)
-            } else {
-                format!("{:.1}k", k_value)
+                let percentage = if context_used_rate.fract() == 0.0 {
+                    format!("{:.0}%", context_used_rate)
+                } else {
+                    format!("{:.1}%", context_used_rate)
+                };
+
+                let tokens = if context_used_token >= 1000 {
+                    let k_value = context_used_token as f64 / 1000.0;
+                    if k_value.fract() == 0.0 {
+                        format!("{}k", k_value as u32)
+                    } else {
+                        format!("{:.1}k", k_value)
+                    }
+                } else {
+                    context_used_token.to_string()
+                };
+
+                (percentage, tokens)
             }
-        } else {
-            context_used_token.to_string()
+            None => {
+                // No usage data available
+                ("-".to_string(), "-".to_string())
+            }
         };
 
         let mut metadata = HashMap::new();
-        metadata.insert("tokens".to_string(), context_used_token.to_string());
-        metadata.insert("percentage".to_string(), context_used_rate.to_string());
+        match context_used_token_opt {
+            Some(context_used_token) => {
+                let context_used_rate = (context_used_token as f64 / context_limit as f64) * 100.0;
+                metadata.insert("tokens".to_string(), context_used_token.to_string());
+                metadata.insert("percentage".to_string(), context_used_rate.to_string());
+            }
+            None => {
+                metadata.insert("tokens".to_string(), "-".to_string());
+                metadata.insert("percentage".to_string(), "-".to_string());
+            }
+        }
         metadata.insert("limit".to_string(), context_limit.to_string());
         metadata.insert("model".to_string(), input.model.id.clone());
 
@@ -63,22 +83,22 @@ impl Segment for UsageSegment {
     }
 }
 
-fn parse_transcript_usage<P: AsRef<Path>>(transcript_path: P) -> u32 {
+fn parse_transcript_usage<P: AsRef<Path>>(transcript_path: P) -> Option<u32> {
     let path = transcript_path.as_ref();
 
     // Try to parse from current transcript file
     if let Some(usage) = try_parse_transcript_file(path) {
-        return usage;
+        return Some(usage);
     }
 
     // If file doesn't exist, try to find usage from project history
     if !path.exists() {
         if let Some(usage) = try_find_usage_from_project_history(path) {
-            return usage;
+            return Some(usage);
         }
     }
 
-    0
+    None
 }
 
 fn try_parse_transcript_file(path: &Path) -> Option<u32> {
