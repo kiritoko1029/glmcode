@@ -116,6 +116,24 @@ impl UsageSegment {
         "claude-code".to_string()
     }
 
+    fn get_proxy_from_settings() -> Option<String> {
+        let home = std::env::var("HOME")
+            .or_else(|_| std::env::var("USERPROFILE"))
+            .ok()?;
+        let settings_path = format!("{}/.claude/settings.json", home);
+
+        let content = std::fs::read_to_string(&settings_path).ok()?;
+        let settings: serde_json::Value = serde_json::from_str(&content).ok()?;
+
+        // Try HTTPS_PROXY first, then HTTP_PROXY
+        settings
+            .get("env")?
+            .get("HTTPS_PROXY")
+            .or_else(|| settings.get("env")?.get("HTTP_PROXY"))
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string())
+    }
+
     fn fetch_api_usage(
         &self,
         api_base_url: &str,
@@ -125,7 +143,20 @@ impl UsageSegment {
         let url = format!("{}/api/oauth/usage", api_base_url);
         let user_agent = Self::get_claude_code_version();
 
-        let response = ureq::get(&url)
+        let mut agent_builder = ureq::AgentBuilder::new();
+
+        // Configure proxy from Claude settings if available
+        if let Some(proxy_url) = Self::get_proxy_from_settings() {
+            if let Ok(proxy) = ureq::Proxy::new(&proxy_url) {
+                agent_builder = agent_builder.proxy(proxy);
+                println!("Using proxy: {}", proxy_url);
+            }
+        }
+
+        let agent = agent_builder.build();
+
+        let response = agent
+            .get(&url)
             .set("Authorization", &format!("Bearer {}", token))
             .set("anthropic-beta", "oauth-2025-04-20")
             .set("User-Agent", &user_agent)
