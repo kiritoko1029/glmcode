@@ -149,7 +149,6 @@ impl UsageSegment {
         if let Some(proxy_url) = Self::get_proxy_from_settings() {
             if let Ok(proxy) = ureq::Proxy::new(&proxy_url) {
                 agent_builder = agent_builder.proxy(proxy);
-                println!("Using proxy: {}", proxy_url);
             }
         }
 
