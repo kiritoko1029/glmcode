@@ -1,14 +1,14 @@
 {
-  "name": "@cometix/ccline-darwin-x64",
+  "name": "@kiritoko1029/glmcode-darwin-x64",
   "version": "0.0.0",
-  "description": "macOS x64 binary for CCometixLine",
-  "files": ["ccline"],
+  "description": "macOS x64 binary for GLMCode",
+  "files": ["glmcode"],
   "os": ["darwin"],
   "cpu": ["x64"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Haleclipse/CCometixLine"
+    "url": "https://github.com/kiritoko1029/glmcode"
   },
-  "author": "Haleclipse",
+  "author": "kiritoko1029",
   "license": "MIT"
 }

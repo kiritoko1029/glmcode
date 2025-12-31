@@ -50,12 +50,12 @@ impl ThemePresets {
         Ok(config)
     }
 
-    /// Get the themes directory path (~/.claude/ccline/themes/)
+    /// Get the themes directory path (~/.claude/glmcode/themes/)
     fn get_themes_path() -> std::path::PathBuf {
         if let Some(home) = dirs::home_dir() {
-            home.join(".claude").join("ccline").join("themes")
+            home.join(".claude").join("glmcode").join("themes")
         } else {
-            std::path::PathBuf::from(".claude/ccline/themes")
+            std::path::PathBuf::from(".claude/glmcode/themes")
         }
     }
 
@@ -134,7 +134,7 @@ impl ThemePresets {
                 theme_cometix::git_segment(),
                 theme_cometix::context_window_segment(),
                 theme_cometix::usage_segment(),
-                theme_cometix::cost_segment(),
+                theme_cometix::glm_usage_segment(),
                 theme_cometix::session_segment(),
                 theme_cometix::output_style_segment(),
             ],
@@ -154,7 +154,7 @@ impl ThemePresets {
                 theme_default::git_segment(),
                 theme_default::context_window_segment(),
                 theme_default::usage_segment(),
-                theme_default::cost_segment(),
+                theme_default::glm_usage_segment(),
                 theme_default::session_segment(),
                 theme_default::output_style_segment(),
             ],
@@ -174,7 +174,7 @@ impl ThemePresets {
                 theme_minimal::git_segment(),
                 theme_minimal::context_window_segment(),
                 theme_minimal::usage_segment(),
-                theme_minimal::cost_segment(),
+                theme_minimal::glm_usage_segment(),
                 theme_minimal::session_segment(),
                 theme_minimal::output_style_segment(),
             ],
@@ -194,7 +194,7 @@ impl ThemePresets {
                 theme_gruvbox::git_segment(),
                 theme_gruvbox::context_window_segment(),
                 theme_gruvbox::usage_segment(),
-                theme_gruvbox::cost_segment(),
+                theme_gruvbox::glm_usage_segment(),
                 theme_gruvbox::session_segment(),
                 theme_gruvbox::output_style_segment(),
             ],
@@ -214,7 +214,7 @@ impl ThemePresets {
                 theme_nord::git_segment(),
                 theme_nord::context_window_segment(),
                 theme_nord::usage_segment(),
-                theme_nord::cost_segment(),
+                theme_nord::glm_usage_segment(),
                 theme_nord::session_segment(),
                 theme_nord::output_style_segment(),
             ],
@@ -234,7 +234,7 @@ impl ThemePresets {
                 theme_powerline_dark::git_segment(),
                 theme_powerline_dark::context_window_segment(),
                 theme_powerline_dark::usage_segment(),
-                theme_powerline_dark::cost_segment(),
+                theme_powerline_dark::glm_usage_segment(),
                 theme_powerline_dark::session_segment(),
                 theme_powerline_dark::output_style_segment(),
             ],
@@ -254,7 +254,7 @@ impl ThemePresets {
                 theme_powerline_light::git_segment(),
                 theme_powerline_light::context_window_segment(),
                 theme_powerline_light::usage_segment(),
-                theme_powerline_light::cost_segment(),
+                theme_powerline_light::glm_usage_segment(),
                 theme_powerline_light::session_segment(),
                 theme_powerline_light::output_style_segment(),
             ],
@@ -274,7 +274,7 @@ impl ThemePresets {
                 theme_powerline_rose_pine::git_segment(),
                 theme_powerline_rose_pine::context_window_segment(),
                 theme_powerline_rose_pine::usage_segment(),
-                theme_powerline_rose_pine::cost_segment(),
+                theme_powerline_rose_pine::glm_usage_segment(),
                 theme_powerline_rose_pine::session_segment(),
                 theme_powerline_rose_pine::output_style_segment(),
             ],
@@ -294,7 +294,7 @@ impl ThemePresets {
                 theme_powerline_tokyo_night::git_segment(),
                 theme_powerline_tokyo_night::context_window_segment(),
                 theme_powerline_tokyo_night::usage_segment(),
-                theme_powerline_tokyo_night::cost_segment(),
+                theme_powerline_tokyo_night::glm_usage_segment(),
                 theme_powerline_tokyo_night::session_segment(),
                 theme_powerline_tokyo_night::output_style_segment(),
             ],

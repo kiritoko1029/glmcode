@@ -1,11 +1,11 @@
-# @cometix/ccline
+# @kiritoko1029/glmcode
 
-CCometixLine - High-performance Claude Code StatusLine tool
+GLMCode - High-performance Claude Code StatusLine tool
 
 ## Installation
 
 ```bash
-npm install -g @cometix/ccline
+npm install -g @kiritoko1029/glmcode
 ```
 
 ## Features
@@ -18,13 +18,13 @@ npm install -g @cometix/ccline
 
 ## Usage
 
-After installation, ccline is automatically configured for Claude Code at `~/.claude/ccline/ccline`.
+After installation, ccline is automatically configured for Claude Code at `~/.claude/glmcode/ccline`.
 
 You can also use it directly:
 
 ```bash
-ccline --help
-ccline --version
+glmcode --help
+glmcode --version
 ```
 
 ## For Users in China
@@ -32,11 +32,11 @@ ccline --version
 Use npm mirror for faster installation:
 
 ```bash
-npm install -g @cometix/ccline --registry https://registry.npmmirror.com
+npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 ```
 
 ## More Information
 
-- GitHub: https://github.com/Haleclipse/CCometixLine
-- Issues: https://github.com/Haleclipse/CCometixLine/issues
+- GitHub: https://github.com/Haleclipse/GLMCode
+- Issues: https://github.com/Haleclipse/GLMCode/issues
 - License: MIT

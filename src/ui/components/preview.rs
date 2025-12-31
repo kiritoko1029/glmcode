@@ -105,11 +105,11 @@ impl PreviewComponent {
                     },
                 },
                 SegmentId::Directory => SegmentData {
-                    primary: "CCometixLine".to_string(),
+                    primary: "GLMCode".to_string(),
                     secondary: "".to_string(),
                     metadata: {
                         let mut map = HashMap::new();
-                        map.insert("current_dir".to_string(), "~/CCometixLine".to_string());
+                        map.insert("current_dir".to_string(), "~/GLMCode".to_string());
                         map
                     },
                 },
@@ -141,15 +141,6 @@ impl PreviewComponent {
                     secondary: "· 10-7-2".to_string(),
                     metadata: HashMap::new(),
                 },
-                SegmentId::Cost => SegmentData {
-                    primary: "$0.02".to_string(),
-                    secondary: "".to_string(),
-                    metadata: {
-                        let mut map = HashMap::new();
-                        map.insert("cost".to_string(), "0.01234".to_string());
-                        map
-                    },
-                },
                 SegmentId::Session => SegmentData {
                     primary: "3m45s".to_string(),
                     secondary: "+156 -23".to_string(),
@@ -180,6 +171,18 @@ impl PreviewComponent {
                             env!("CARGO_PKG_VERSION").to_string(),
                         );
                         map.insert("update_available".to_string(), "false".to_string());
+                        map
+                    },
+                },
+                SegmentId::GlmUsage => SegmentData {
+                    primary: "智谱 ▓▓▓▓▓▓░░░░ 15%".to_string(),
+                    secondary: "MCP: 5%".to_string(),
+                    metadata: {
+                        let mut map = HashMap::new();
+                        map.insert("dynamic_icon".to_string(), "glm".to_string());
+                        map.insert("platform".to_string(), "智谱".to_string());
+                        map.insert("tokens_percentage".to_string(), "15.0".to_string());
+                        map.insert("time_percentage".to_string(), "5.0".to_string());
                         map
                     },
                 },

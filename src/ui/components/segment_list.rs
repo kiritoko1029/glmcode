@@ -48,15 +48,15 @@ impl SegmentListComponent {
                 let is_selected = i == selected_segment && *selected_panel == Panel::SegmentList;
                 let enabled_marker = if segment.enabled { "●" } else { "○" };
                 let segment_name = match segment.id {
-                    SegmentId::Model => "Model",
-                    SegmentId::Directory => "Directory",
+                    SegmentId::Model => "模型",
+                    SegmentId::Directory => "目录",
                     SegmentId::Git => "Git",
-                    SegmentId::ContextWindow => "Context Window",
-                    SegmentId::Usage => "Usage",
-                    SegmentId::Cost => "Cost",
-                    SegmentId::Session => "Session",
-                    SegmentId::OutputStyle => "Output Style",
-                    SegmentId::Update => "Update",
+                    SegmentId::ContextWindow => "上下文窗口",
+                    SegmentId::Usage => "用量",
+                    SegmentId::Session => "会话",
+                    SegmentId::OutputStyle => "输出样式",
+                    SegmentId::Update => "更新",
+                    SegmentId::GlmUsage => "GLM用量",
                 };
 
                 if is_selected {
@@ -73,7 +73,7 @@ impl SegmentListComponent {
             .collect();
         let segments_block = Block::default()
             .borders(Borders::ALL)
-            .title("Segments")
+            .title("段落")
             .border_style(if *selected_panel == Panel::SegmentList {
                 Style::default().fg(Color::Cyan)
             } else {

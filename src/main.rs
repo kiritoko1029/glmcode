@@ -1,6 +1,6 @@
-use ccometixline::cli::Cli;
-use ccometixline::config::{Config, InputData};
-use ccometixline::core::{collect_all_segments, StatusLineGenerator};
+use glmcode::cli::Cli;
+use glmcode::config::{Config, InputData};
+use glmcode::core::{collect_all_segments, StatusLineGenerator};
 use std::io::{self, IsTerminal};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -8,7 +8,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Handle configuration commands
     if cli.init {
-        use ccometixline::config::InitResult;
+        use glmcode::config::InitResult;
         match Config::init()? {
             InitResult::Created(path) => println!("Created config at {}", path.display()),
             InitResult::AlreadyExists(path) => {
@@ -23,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // Apply theme override if provided
         if let Some(theme) = cli.theme {
-            config = ccometixline::ui::themes::ThemePresets::get_theme(&theme);
+            config = glmcode::ui::themes::ThemePresets::get_theme(&theme);
         }
 
         config.print()?;
@@ -40,7 +40,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if cli.config {
         #[cfg(feature = "tui")]
         {
-            ccometixline::ui::run_configurator()?;
+            glmcode::ui::run_configurator()?;
         }
         #[cfg(not(feature = "tui"))]
         {
@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Handle Claude Code patcher
     if let Some(claude_path) = cli.patch {
-        use ccometixline::utils::ClaudeCodePatcher;
+        use glmcode::utils::ClaudeCodePatcher;
 
         println!("🔧 Claude Code Context Warning Disabler");
         println!("Target file: {}", claude_path);
@@ -93,7 +93,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Apply theme override if provided
     if let Some(theme) = cli.theme {
-        config = ccometixline::ui::themes::ThemePresets::get_theme(&theme);
+        config = glmcode::ui::themes::ThemePresets::get_theme(&theme);
     }
 
     // Check if stdin has data
@@ -101,12 +101,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // No input data available, show main menu
         #[cfg(feature = "tui")]
         {
-            use ccometixline::ui::{MainMenu, MenuResult};
+            use glmcode::ui::{MainMenu, MenuResult};
 
             if let Some(result) = MainMenu::run()? {
                 match result {
                     MenuResult::LaunchConfigurator => {
-                        ccometixline::ui::run_configurator()?;
+                        glmcode::ui::run_configurator()?;
                     }
                     MenuResult::InitConfig | MenuResult::CheckConfig => {
                         // These are now handled internally by the menu
@@ -121,8 +121,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(not(feature = "tui"))]
         {
             eprintln!("No input data provided and TUI feature is not enabled.");
-            eprintln!("Usage: echo '{{...}}' | ccline");
-            eprintln!("   or: ccline --help");
+            eprintln!("Usage: echo '{{...}}' | glmcode");
+            eprintln!("   or: glmcode --help");
         }
         return Ok(());
     }

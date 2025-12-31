@@ -69,10 +69,10 @@ pub enum SegmentId {
     Git,
     ContextWindow,
     Usage,
-    Cost,
     Session,
     OutputStyle,
     Update,
+    GlmUsage,
 }
 
 // Legacy compatibility structure

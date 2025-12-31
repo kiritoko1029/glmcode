@@ -29,7 +29,7 @@ impl ModelConfig {
 
         // First, try to create default models.toml if it doesn't exist
         if let Some(home_dir) = dirs::home_dir() {
-            let user_models_path = home_dir.join(".claude").join("ccline").join("models.toml");
+            let user_models_path = home_dir.join(".claude").join("glmcode").join("models.toml");
             if !user_models_path.exists() {
                 let _ = Self::create_default_file(&user_models_path);
             }
@@ -37,7 +37,7 @@ impl ModelConfig {
 
         // Try loading from user config directory first, then local
         let config_paths = [
-            dirs::home_dir().map(|d| d.join(".claude").join("ccline").join("models.toml")),
+            dirs::home_dir().map(|d| d.join(".claude").join("glmcode").join("models.toml")),
             Some(Path::new("models.toml").to_path_buf()),
         ];
 
@@ -99,9 +99,9 @@ impl ModelConfig {
 
         // Add comments and examples to the template
         let template_content = format!(
-            "# CCometixLine Model Configuration\n\
+            "# GLMCode Model Configuration\n\
              # This file defines model display names and context limits for different LLM models\n\
-             # File location: ~/.claude/ccline/models.toml\n\
+             # File location: ~/.claude/glmcode/models.toml\n\
              \n\
              {}\n\
              \n\

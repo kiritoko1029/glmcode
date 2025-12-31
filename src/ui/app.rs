@@ -23,6 +23,7 @@ use ratatui::{
     Frame, Terminal,
 };
 use std::io;
+use unicode_width::UnicodeWidthStr;
 
 pub struct App {
     config: Config,
@@ -71,17 +72,10 @@ impl App {
             eprintln!("Warning: Failed to initialize themes: {}", e);
         }
 
-        // Load config
-        let mut config = Config::load().unwrap_or_else(|_| Config::default());
-
-        // If a theme is specified, reload it to get the latest changes
-        if !config.theme.is_empty() && config.theme != "default" {
-            if let Ok(theme_config) =
-                crate::ui::themes::ThemePresets::load_theme_from_file(&config.theme)
-            {
-                config = theme_config;
-            }
-        }
+        // Load config from config.toml
+        // Note: We NO longer reload from theme file to preserve user modifications
+        // Users should use [P] to switch themes or [R] to reset to theme defaults
+        let config = Config::load().unwrap_or_else(|_| Config::default());
 
         // Terminal setup
         enable_raw_mode()?;
@@ -124,7 +118,7 @@ impl App {
                             app.config.style.separator = new_separator;
                             app.separator_editor.close();
                             app.preview.update_preview(&app.config);
-                            app.status_message = Some("Separator updated!".to_string());
+                            app.status_message = Some("分隔符已更新!".to_string());
                         }
                         KeyCode::Tab => {
                             app.separator_editor.input.clear();
@@ -190,15 +184,15 @@ impl App {
                         KeyCode::Char('s') => {
                             if key.modifiers.contains(KeyModifiers::CONTROL) {
                                 // Ctrl+S: Save as new theme with name input
-                                app.name_input.open("Save as New Theme", "Enter theme name");
+                                app.name_input.open("另存为新主题", "输入主题名称");
                             } else {
                                 // s: Save config to config.toml
                                 if let Err(e) = app.save_config() {
                                     app.status_message =
-                                        Some(format!("Failed to save config: {}", e));
+                                        Some(format!("保存配置失败: {}", e));
                                 } else {
                                     app.status_message =
-                                        Some("Configuration saved to config.toml!".to_string());
+                                        Some("配置已保存到 config.toml!".to_string());
                                 }
                             }
                         }
@@ -248,8 +242,11 @@ impl App {
     }
 
     fn calculate_theme_selector_height(&self, total_width: u16) -> u16 {
-        // Get all available themes dynamically
-        let available_themes = crate::ui::themes::ThemePresets::list_available_themes();
+        // Get all available themes dynamically and filter out empty names
+        let available_themes: Vec<String> = crate::ui::themes::ThemePresets::list_available_themes()
+            .into_iter()
+            .filter(|theme| !theme.trim().is_empty())
+            .collect();
 
         // Calculate available width (minus borders only)
         let content_width = total_width.saturating_sub(2); // Remove borders
@@ -260,7 +257,7 @@ impl App {
         let mut first_line = true;
 
         for (i, theme) in available_themes.iter().enumerate() {
-            let marker = if self.config.theme == *theme {
+            let marker = if self.config.theme == theme.as_str() {
                 "[✓]"
             } else {
                 "[ ]"
@@ -269,51 +266,53 @@ impl App {
             let separator = if i == 0 { "" } else { "  " };
             let part_with_sep = format!("{}{}", separator, theme_part);
 
-            let would_fit = current_line_length + part_with_sep.len() <= content_width as usize;
+            // Use unicode width for proper display width calculation
+            let would_fit = current_line_length + part_with_sep.width() <= content_width as usize;
 
             if would_fit || first_line {
-                current_line_length += part_with_sep.len();
+                current_line_length += part_with_sep.width();
                 first_line = false;
             } else {
                 line_count += 1;
-                current_line_length = theme_part.len();
+                current_line_length = theme_part.width();
             }
         }
 
-        // Return height: content lines + borders (top + bottom)
-        line_count + 2
+        // Return height: content lines + borders (top + bottom) + extra lines
+        // Extra lines: empty separator (1) + preview line (1) + separator display (1) = 3
+        line_count + 2 + 3
     }
 
     fn calculate_help_height(&self, total_width: u16) -> u16 {
-        // Use same help_items as in help.render
+        // Use same help_items as in help.render (must match Chinese text)
         let help_items = if self.color_picker.is_open {
             vec![
-                "[↑↓] Navigate",
-                "[Tab] Mode",
-                "[Enter] Select",
-                "[Esc] Cancel",
+                "[↑↓] 导航",
+                "[Tab] 模式",
+                "[Enter] 选择",
+                "[Esc] 取消",
             ]
         } else if self.icon_selector.is_open {
             vec![
-                "[↑↓] Navigate",
-                "[Tab] Style",
-                "[C] Custom",
-                "[Enter] Select",
-                "[Esc] Cancel",
+                "[↑↓] 导航",
+                "[Tab] 样式",
+                "[C] 自定义",
+                "[Enter] 选择",
+                "[Esc] 取消",
             ]
         } else {
             vec![
-                "[Tab] Switch Panel",
-                "[Enter] Toggle/Edit",
-                "[Shift+↑↓] Reorder",
-                "[1-4] Theme",
-                "[P] Switch Theme",
-                "[R] Reset",
-                "[E] Edit Separator",
-                "[S] Save Config",
-                "[W] Write Theme",
-                "[Ctrl+S] Save Theme",
-                "[Esc] Quit",
+                "[Tab] 切换面板",
+                "[Enter] 开关/编辑",
+                "[Shift+↑↓] 排序",
+                "[1-4] 主题",
+                "[P] 切换主题",
+                "[R] 重置",
+                "[E] 编辑分隔符",
+                "[S] 保存配置",
+                "[W] 写入主题",
+                "[Ctrl+S] 另存主题",
+                "[Esc] 退出",
             ]
         };
 
@@ -322,8 +321,9 @@ impl App {
         let mut current_width = 0usize;
 
         // Use same logic as help.render for line wrapping
+        // Use unicode width for proper CJK character handling
         for (i, item) in help_items.iter().enumerate() {
-            let item_width = item.chars().count();
+            let item_width = item.width();
             let needs_separator = i > 0 && current_width > 0;
             let separator_width = if needs_separator { 2 } else { 0 };
             let total_width = item_width + separator_width;
@@ -386,7 +386,7 @@ impl App {
             .split(f.area());
 
         // Title
-        let title_text = format!("CCometixLine Configurator v{}", env!("CARGO_PKG_VERSION"));
+        let title_text = format!("GLMCode 配置器 v{}", env!("CARGO_PKG_VERSION"));
         let title = Paragraph::new(title_text)
             .block(Block::default().borders(Borders::ALL))
             .style(Style::default().fg(Color::Cyan))
@@ -497,21 +497,21 @@ impl App {
                 if let Some(segment) = self.config.segments.get_mut(self.selected_segment) {
                     segment.enabled = !segment.enabled;
                     let segment_name = match segment.id {
-                        SegmentId::Model => "Model",
-                        SegmentId::Directory => "Directory",
+                        SegmentId::Model => "模型",
+                        SegmentId::Directory => "目录",
                         SegmentId::Git => "Git",
-                        SegmentId::ContextWindow => "Context Window",
-                        SegmentId::Usage => "Usage",
-                        SegmentId::Cost => "Cost",
-                        SegmentId::Session => "Session",
-                        SegmentId::OutputStyle => "Output Style",
-                        SegmentId::Update => "Update",
+                        SegmentId::ContextWindow => "上下文窗口",
+                        SegmentId::Usage => "用量",
+                        SegmentId::Session => "会话",
+                        SegmentId::OutputStyle => "输出样式",
+                        SegmentId::Update => "更新",
+                        SegmentId::GlmUsage => "GLM用量",
                     };
                     let is_enabled = segment.enabled;
                     self.status_message = Some(format!(
-                        "{} segment {}",
+                        "{} 段落已{}",
                         segment_name,
-                        if is_enabled { "enabled" } else { "disabled" }
+                        if is_enabled { "启用" } else { "禁用" }
                     ));
                     self.preview.update_preview(&self.config);
                 }
@@ -524,21 +524,21 @@ impl App {
                         if let Some(segment) = self.config.segments.get_mut(self.selected_segment) {
                             segment.enabled = !segment.enabled;
                             let segment_name = match segment.id {
-                                SegmentId::Model => "Model",
-                                SegmentId::Directory => "Directory",
+                                SegmentId::Model => "模型",
+                                SegmentId::Directory => "目录",
                                 SegmentId::Git => "Git",
-                                SegmentId::ContextWindow => "Context Window",
-                                SegmentId::Usage => "Usage",
-                                SegmentId::Cost => "Cost",
-                                SegmentId::Session => "Session",
-                                SegmentId::OutputStyle => "Output Style",
-                                SegmentId::Update => "Update",
+                                SegmentId::ContextWindow => "上下文窗口",
+                                SegmentId::Usage => "用量",
+                                SegmentId::Session => "会话",
+                                SegmentId::OutputStyle => "输出样式",
+                                SegmentId::Update => "更新",
+                                SegmentId::GlmUsage => "GLM用量",
                             };
                             let is_enabled = segment.enabled;
                             self.status_message = Some(format!(
-                                "{} segment {}",
+                                "{} 段落已{}",
                                 segment_name,
-                                if is_enabled { "enabled" } else { "disabled" }
+                                if is_enabled { "启用" } else { "禁用" }
                             ));
                             self.preview.update_preview(&self.config);
                         }
@@ -552,11 +552,11 @@ impl App {
                         if let Some(segment) = self.config.segments.get_mut(self.selected_segment) {
                             segment.styles.text_bold = !segment.styles.text_bold;
                             self.status_message = Some(format!(
-                                "Text bold {}",
+                                "粗体已{}",
                                 if segment.styles.text_bold {
-                                    "enabled"
+                                    "启用"
                                 } else {
-                                    "disabled"
+                                    "禁用"
                                 }
                             ));
                             self.preview.update_preview(&self.config);
@@ -565,7 +565,7 @@ impl App {
                     FieldSelection::Options => {
                         // TODO: Implement options editor
                         self.status_message =
-                            Some("Options editor not implemented yet".to_string());
+                            Some("选项编辑器尚未实现".to_string());
                     }
                 }
             }
@@ -624,7 +624,7 @@ impl App {
         let next_index = (current_index + 1) % themes.len();
         let next_theme = &themes[next_index];
 
-        self.status_message = Some(format!("Switching to theme: {}", next_theme));
+        self.status_message = Some(format!("正在切换到主题: {}", next_theme));
         self.switch_to_theme(next_theme);
     }
 
@@ -632,7 +632,7 @@ impl App {
         self.config = crate::ui::themes::ThemePresets::get_theme(theme_name);
         self.selected_segment = 0;
         self.preview.update_preview(&self.config);
-        self.status_message = Some(format!("Switched to {} theme", theme_name));
+        self.status_message = Some(format!("已切换到 {} 主题", theme_name));
     }
 
     /// Reset current theme to its default configuration
@@ -641,7 +641,7 @@ impl App {
         self.config = crate::ui::themes::ThemePresets::get_theme(&current_theme);
         self.selected_segment = 0;
         self.preview.update_preview(&self.config);
-        self.status_message = Some(format!("Reset {} theme to defaults", current_theme));
+        self.status_message = Some(format!("已重置 {} 主题为默认值", current_theme));
     }
 
     fn save_config(&mut self) -> Result<(), Box<dyn std::error::Error>> {
@@ -656,7 +656,7 @@ impl App {
             self.config.segments.swap(current_idx, current_idx - 1);
             self.selected_segment -= 1;
             self.preview.update_preview(&self.config);
-            self.status_message = Some("Moved segment up".to_string());
+            self.status_message = Some("已上移段落".to_string());
         }
     }
 
@@ -669,7 +669,7 @@ impl App {
             self.config.segments.swap(current_idx, current_idx + 1);
             self.selected_segment += 1;
             self.preview.update_preview(&self.config);
-            self.status_message = Some("Moved segment down".to_string());
+            self.status_message = Some("已下移段落".to_string());
         }
     }
 
@@ -678,11 +678,11 @@ impl App {
         let current_theme = &self.config.theme;
         match crate::ui::themes::ThemePresets::save_theme(current_theme, &self.config) {
             Ok(_) => {
-                self.status_message = Some(format!("Wrote config to theme: {}", current_theme));
+                self.status_message = Some(format!("已写入主题: {}", current_theme));
             }
             Err(e) => {
                 self.status_message =
-                    Some(format!("Failed to write to theme {}: {}", current_theme, e));
+                    Some(format!("写入主题 {} 失败: {}", current_theme, e));
             }
         }
     }
@@ -693,17 +693,17 @@ impl App {
             Ok(_) => {
                 // Update current theme to the new one
                 self.config.theme = theme_name.to_string();
-                self.status_message = Some(format!("Saved as new theme: {}", theme_name));
+                self.status_message = Some(format!("已另存为新主题: {}", theme_name));
             }
             Err(e) => {
-                self.status_message = Some(format!("Failed to save theme {}: {}", theme_name, e));
+                self.status_message = Some(format!("保存主题 {} 失败: {}", theme_name, e));
             }
         }
     }
 
     /// Open separator editor with current separator
     fn open_separator_editor(&mut self) {
-        self.status_message = Some("Opening separator editor...".to_string());
+        self.status_message = Some("正在打开分隔符编辑器...".to_string());
         self.separator_editor.open(&self.config.style.separator);
     }
 }

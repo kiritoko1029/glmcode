@@ -79,23 +79,6 @@ pub fn context_window_segment() -> SegmentConfig {
     }
 }
 
-pub fn cost_segment() -> SegmentConfig {
-    SegmentConfig {
-        id: SegmentId::Cost,
-        enabled: false,
-        icon: IconConfig {
-            plain: "💰".to_string(),
-            nerd_font: "\u{eec1}".to_string(),
-        },
-        colors: ColorConfig {
-            icon: Some(AnsiColor::Color256 { c256: 214 }), // Gruvbox yellow
-            text: Some(AnsiColor::Color256 { c256: 214 }),
-            background: None,
-        },
-        styles: TextStyleConfig { text_bold: true },
-        options: HashMap::new(),
-    }
-}
 
 pub fn session_segment() -> SegmentConfig {
     SegmentConfig {
@@ -160,5 +143,23 @@ pub fn usage_segment() -> SegmentConfig {
             opts.insert("timeout".to_string(), serde_json::Value::Number(2.into()));
             opts
         },
+    }
+}
+
+pub fn glm_usage_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::GlmUsage,
+        enabled: false,
+        icon: IconConfig {
+            plain: "📊".to_string(),
+            nerd_font: "\u{f4a8}".to_string(),
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Color256 { c256: 175 }), // Gruvbox purple
+            text: Some(AnsiColor::Color256 { c256: 175 }),
+            background: None,
+        },
+        styles: TextStyleConfig { text_bold: true },
+        options: HashMap::new(),
     }
 }

@@ -1,14 +1,14 @@
 {
-  "name": "@cometix/ccline-linux-x64",
+  "name": "@kiritoko1029/glmcode-linux-x64",
   "version": "0.0.0",
-  "description": "Linux x64 binary for CCometixLine",
-  "files": ["ccline"],
+  "description": "Linux x64 binary for GLMCode",
+  "files": ["glmcode"],
   "os": ["linux"],
   "cpu": ["x64"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Haleclipse/CCometixLine"
+    "url": "https://github.com/kiritoko1029/glmcode"
   },
-  "author": "Haleclipse",
+  "author": "kiritoko1029",
   "license": "MIT"
 }

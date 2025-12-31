@@ -1,26 +1,26 @@
 {
-  "name": "@cometix/ccline",
+  "name": "@kiritoko1029/glmcode",
   "version": "0.0.0",
-  "description": "CCometixLine - High-performance Claude Code StatusLine tool",
+  "description": "GLMCode - Claude Code StatusLine with GLM usage tracking",
   "bin": {
-    "ccline": "./bin/ccline.js"
+    "glmcode": "./bin/glmcode.js"
   },
   "scripts": {
     "postinstall": "node scripts/postinstall.js"
   },
   "optionalDependencies": {
-    "@cometix/ccline-darwin-x64": "0.0.0",
-    "@cometix/ccline-darwin-arm64": "0.0.0",
-    "@cometix/ccline-linux-x64": "0.0.0",
-    "@cometix/ccline-linux-x64-musl": "0.0.0",
-    "@cometix/ccline-win32-x64": "0.0.0"
+    "@kiritoko1029/glmcode-darwin-x64": "0.0.0",
+    "@kiritoko1029/glmcode-darwin-arm64": "0.0.0",
+    "@kiritoko1029/glmcode-linux-x64": "0.0.0",
+    "@kiritoko1029/glmcode-linux-x64-musl": "0.0.0",
+    "@kiritoko1029/glmcode-win32-x64": "0.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Haleclipse/CCometixLine"
+    "url": "https://github.com/kiritoko1029/glmcode"
   },
-  "keywords": ["claude", "statusline", "claude-code", "rust", "cli"],
-  "author": "Haleclipse",
+  "keywords": ["claude", "statusline", "claude-code", "glm", "rust", "cli"],
+  "author": "kiritoko1029",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
