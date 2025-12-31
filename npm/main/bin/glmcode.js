@@ -58,12 +58,12 @@ if (platform === 'linux') {
 }
 
 const packageMap = {
-  'darwin-x64': '@kiritoko1029/glmcode-darwin-x64',
-  'darwin-arm64': '@kiritoko1029/glmcode-darwin-arm64',
-  'linux-x64': '@kiritoko1029/glmcode-linux-x64',
-  'linux-x64-musl': '@kiritoko1029/glmcode-linux-x64-musl',
-  'win32-x64': '@kiritoko1029/glmcode-win32-x64',
-  'win32-ia32': '@kiritoko1029/glmcode-win32-x64', // Use 64-bit for 32-bit systems
+  'darwin-x64': '@chenxiangc/glmcode-darwin-x64',
+  'darwin-arm64': '@chenxiangc/glmcode-darwin-arm64',
+  'linux-x64': '@chenxiangc/glmcode-linux-x64',
+  'linux-x64-musl': '@chenxiangc/glmcode-linux-x64-musl',
+  'win32-x64': '@chenxiangc/glmcode-win32-x64',
+  'win32-ia32': '@chenxiangc/glmcode-win32-x64', // Use 64-bit for 32-bit systems
 };
 
 const packageName = packageMap[platformKey];
@@ -80,7 +80,7 @@ const binaryPath = path.join(__dirname, '..', 'node_modules', packageName, binar
 if (!fs.existsSync(binaryPath)) {
   console.error(`Error: Binary not found at ${binaryPath}`);
   console.error('This might indicate a failed installation or unsupported platform.');
-  console.error('Please try reinstalling: npm install -g @kiritoko1029/glmcode');
+  console.error('Please try reinstalling: npm install -g @chenxiangc/glmcode');
   console.error(`Expected package: ${packageName}`);
   process.exit(1);
 }

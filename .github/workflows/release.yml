@@ -173,11 +173,11 @@ jobs:
       run: |
         # Publish platform packages first
         for platform in darwin-x64 darwin-arm64 linux-x64 linux-x64-musl win32-x64; do
-          echo "📦 Publishing @kiritoko1029/glmcode-$platform"
+          echo "📦 Publishing @chenxiangc/glmcode-$platform"
           cd npm-publish/$platform
           npm publish --access public
           cd ../..
-          echo "✅ Published @kiritoko1029/glmcode-$platform"
+          echo "✅ Published @chenxiangc/glmcode-$platform"
         done
 
     - name: Wait for NPM registry
@@ -190,9 +190,9 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
         cd npm-publish/main
-        echo "📦 Publishing @kiritoko1029/glmcode"
+        echo "📦 Publishing @chenxiangc/glmcode"
         npm publish --access public
-        echo "✅ Published @kiritoko1029/glmcode"
+        echo "✅ Published @chenxiangc/glmcode"
         echo ""
         echo "🎉 NPM packages published successfully!"
-        echo "Install with: npm install -g @kiritoko1029/glmcode"
+        echo "Install with: npm install -g @chenxiangc/glmcode"

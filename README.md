@@ -43,18 +43,18 @@ Install via npm (works on all platforms):
 
 ```bash
 # Install globally
-npm install -g @kiritoko1029/glmcode
+npm install -g @chenxiangc/glmcode
 
 # Or using yarn
-yarn global add @kiritoko1029/glmcode
+yarn global add @chenxiangc/glmcode
 
 # Or using pnpm
-pnpm add -g @kiritoko1029/glmcode
+pnpm add -g @chenxiangc/glmcode
 ```
 
 Use npm mirror for faster download:
 ```bash
-npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
+npm install -g @chenxiangc/glmcode --registry https://registry.npmmirror.com
 ```
 
 After installation:
@@ -103,7 +103,7 @@ Add to your Claude Code `settings.json`:
 ### Update
 
 ```bash
-npm update -g @kiritoko1029/glmcode
+npm update -g @chenxiangc/glmcode
 ```
 
 <details>

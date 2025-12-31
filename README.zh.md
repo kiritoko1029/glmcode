@@ -43,18 +43,18 @@
 
 ```bash
 # 全局安装
-npm install -g @kiritoko1029/glmcode
+npm install -g @chenxiangc/glmcode
 
 # 或使用 yarn
-yarn global add @kiritoko1029/glmcode
+yarn global add @chenxiangc/glmcode
 
 # 或使用 pnpm
-pnpm add -g @kiritoko1029/glmcode
+pnpm add -g @chenxiangc/glmcode
 ```
 
 使用镜像源加速下载：
 ```bash
-npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
+npm install -g @chenxiangc/glmcode --registry https://registry.npmmirror.com
 ```
 
 安装后：
@@ -103,7 +103,7 @@ npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 ### 更新
 
 ```bash
-npm update -g @kiritoko1029/glmcode
+npm update -g @chenxiangc/glmcode
 ```
 
 <details>

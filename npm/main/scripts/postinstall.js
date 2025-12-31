@@ -53,12 +53,12 @@ try {
   }
 
   const packageMap = {
-    'darwin-x64': '@kiritoko1029/glmcode-darwin-x64',
-    'darwin-arm64': '@kiritoko1029/glmcode-darwin-arm64',
-    'linux-x64': '@kiritoko1029/glmcode-linux-x64',
-    'linux-x64-musl': '@kiritoko1029/glmcode-linux-x64-musl',
-    'win32-x64': '@kiritoko1029/glmcode-win32-x64',
-    'win32-ia32': '@kiritoko1029/glmcode-win32-x64', // Use 64-bit for 32-bit
+    'darwin-x64': '@chenxiangc/glmcode-darwin-x64',
+    'darwin-arm64': '@chenxiangc/glmcode-darwin-arm64',
+    'linux-x64': '@chenxiangc/glmcode-linux-x64',
+    'linux-x64-musl': '@chenxiangc/glmcode-linux-x64-musl',
+    'win32-x64': '@chenxiangc/glmcode-win32-x64',
+    'win32-ia32': '@chenxiangc/glmcode-win32-x64', // Use 64-bit for 32-bit
   };
 
   const packageName = packageMap[platformKey];

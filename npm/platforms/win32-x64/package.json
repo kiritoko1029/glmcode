@@ -1,5 +1,5 @@
 {
-  "name": "@kiritoko1029/glmcode-win32-x64",
+  "name": "@chenxiangc/glmcode-win32-x64",
   "version": "0.0.0",
   "description": "Windows x64 binary for GLMCode",
   "files": ["glmcode.exe"],
@@ -9,6 +9,6 @@
     "type": "git",
     "url": "https://github.com/kiritoko1029/glmcode"
   },
-  "author": "kiritoko1029",
+  "author": "chenxiangc",
   "license": "MIT"
 }
