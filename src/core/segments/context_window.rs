@@ -27,7 +27,7 @@ impl Segment for ContextWindowSegment {
 
         let context_used_token_opt = parse_transcript_usage(&input.transcript_path);
 
-        let (percentage_display, tokens_display) = match context_used_token_opt {
+        let primary_display = match context_used_token_opt {
             Some(context_used_token) => {
                 let context_used_rate = (context_used_token as f64 / context_limit as f64) * 100.0;
 
@@ -48,11 +48,11 @@ impl Segment for ContextWindowSegment {
                     context_used_token.to_string()
                 };
 
-                (percentage, tokens)
+                format!("{} · {} tokens", percentage, tokens)
             }
             None => {
                 // No usage data available
-                ("-".to_string(), "-".to_string())
+                "等待数据...".to_string()
             }
         };
 
@@ -72,7 +72,7 @@ impl Segment for ContextWindowSegment {
         metadata.insert("model".to_string(), input.model.id.clone());
 
         Some(SegmentData {
-            primary: format!("{} · {} tokens", percentage_display, tokens_display),
+            primary: primary_display,
             secondary: String::new(),
             metadata,
         })

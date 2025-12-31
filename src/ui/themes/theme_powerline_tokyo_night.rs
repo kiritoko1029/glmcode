@@ -127,35 +127,6 @@ pub fn context_window_segment() -> SegmentConfig {
     }
 }
 
-pub fn cost_segment() -> SegmentConfig {
-    SegmentConfig {
-        id: SegmentId::Cost,
-        enabled: false,
-        icon: IconConfig {
-            plain: "💰".to_string(),
-            nerd_font: "\u{eec1}".to_string(),
-        },
-        colors: ColorConfig {
-            icon: Some(AnsiColor::Rgb {
-                r: 224,
-                g: 175,
-                b: 104,
-            }),
-            text: Some(AnsiColor::Rgb {
-                r: 224,
-                g: 175,
-                b: 104,
-            }),
-            background: Some(AnsiColor::Rgb {
-                r: 36,
-                g: 40,
-                b: 59,
-            }), // Tokyo Night dark background
-        },
-        styles: TextStyleConfig::default(),
-        options: HashMap::new(),
-    }
-}
 
 pub fn session_segment() -> SegmentConfig {
     SegmentConfig {
@@ -244,5 +215,35 @@ pub fn usage_segment() -> SegmentConfig {
             opts.insert("timeout".to_string(), serde_json::Value::Number(2.into()));
             opts
         },
+    }
+}
+
+pub fn glm_usage_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::GlmUsage,
+        enabled: false,
+        icon: IconConfig {
+            plain: "📊".to_string(),
+            nerd_font: "\u{f4a8}".to_string(),
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Rgb {
+                r: 187,
+                g: 154,
+                b: 247,
+            }), // Tokyo Night purple
+            text: Some(AnsiColor::Rgb {
+                r: 187,
+                g: 154,
+                b: 247,
+            }),
+            background: Some(AnsiColor::Rgb {
+                r: 36,
+                g: 40,
+                b: 59,
+            }), // Tokyo Night background
+        },
+        styles: TextStyleConfig::default(),
+        options: HashMap::new(),
     }
 }

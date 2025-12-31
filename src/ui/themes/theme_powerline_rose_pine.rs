@@ -127,35 +127,6 @@ pub fn context_window_segment() -> SegmentConfig {
     }
 }
 
-pub fn cost_segment() -> SegmentConfig {
-    SegmentConfig {
-        id: SegmentId::Cost,
-        enabled: false,
-        icon: IconConfig {
-            plain: "💰".to_string(),
-            nerd_font: "\u{eec1}".to_string(),
-        },
-        colors: ColorConfig {
-            icon: Some(AnsiColor::Rgb {
-                r: 246,
-                g: 193,
-                b: 119,
-            }),
-            text: Some(AnsiColor::Rgb {
-                r: 246,
-                g: 193,
-                b: 119,
-            }),
-            background: Some(AnsiColor::Rgb {
-                r: 35,
-                g: 33,
-                b: 54,
-            }), // Rose Pine dark background
-        },
-        styles: TextStyleConfig::default(),
-        options: HashMap::new(),
-    }
-}
 
 pub fn session_segment() -> SegmentConfig {
     SegmentConfig {
@@ -244,5 +215,35 @@ pub fn usage_segment() -> SegmentConfig {
             opts.insert("timeout".to_string(), serde_json::Value::Number(2.into()));
             opts
         },
+    }
+}
+
+pub fn glm_usage_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::GlmUsage,
+        enabled: false,
+        icon: IconConfig {
+            plain: "📊".to_string(),
+            nerd_font: "\u{f4a8}".to_string(),
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Rgb {
+                r: 235,
+                g: 111,
+                b: 146,
+            }), // Rose Pine love
+            text: Some(AnsiColor::Rgb {
+                r: 235,
+                g: 111,
+                b: 146,
+            }),
+            background: Some(AnsiColor::Rgb {
+                r: 33,
+                g: 32,
+                b: 46,
+            }), // Rose Pine base
+        },
+        styles: TextStyleConfig::default(),
+        options: HashMap::new(),
     }
 }

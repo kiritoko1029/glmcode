@@ -113,11 +113,11 @@ impl MainMenu {
 
     fn get_menu_items(&self) -> Vec<(&str, &str)> {
         vec![
-            (" Configuration Mode", "Enter TUI configuration interface"),
-            (" Initialize Config", "Create default configuration"),
-            (" Check Configuration", "Validate configuration file"),
-            (" About", "Show application information"),
-            (" Exit", "Exit CCometixLine"),
+            (" 配置模式", "进入 TUI 配置界面"),
+            (" 初始化配置", "创建默认配置文件"),
+            (" 检查配置", "验证配置文件"),
+            (" 关于", "显示应用信息"),
+            (" 退出", "退出 GLMCode"),
         ]
     }
 
@@ -130,19 +130,19 @@ impl MainMenu {
                 match crate::config::Config::init() {
                     Ok(InitResult::Created(path)) => {
                         self.status_message = Some(StatusMessage {
-                            message: format!("✓ Created config at {}", path.display()),
+                            message: format!("✓ 已创建配置文件: {}", path.display()),
                             is_error: false,
                         });
                     }
                     Ok(InitResult::AlreadyExists(path)) => {
                         self.status_message = Some(StatusMessage {
-                            message: format!("Config already exists at {}", path.display()),
+                            message: format!("配置文件已存在: {}", path.display()),
                             is_error: false,
                         });
                     }
                     Err(e) => {
                         self.status_message = Some(StatusMessage {
-                            message: format!("✗ Error: {}", e),
+                            message: format!("✗ 错误: {}", e),
                             is_error: true,
                         });
                     }
@@ -155,20 +155,20 @@ impl MainMenu {
                     Ok(config) => match config.check() {
                         Ok(_) => {
                             self.status_message = Some(StatusMessage {
-                                message: "✓ Configuration is valid!".to_string(),
+                                message: "✓ 配置文件有效!".to_string(),
                                 is_error: false,
                             });
                         }
                         Err(e) => {
                             self.status_message = Some(StatusMessage {
-                                message: format!("✗ Invalid: {}", e),
+                                message: format!("✗ 无效: {}", e),
                                 is_error: true,
                             });
                         }
                     },
                     Err(e) => {
                         self.status_message = Some(StatusMessage {
-                            message: format!("✗ Failed to load: {}", e),
+                            message: format!("✗ 加载失败: {}", e),
                             is_error: true,
                         });
                     }
@@ -204,7 +204,7 @@ impl MainMenu {
         let header_text = Text::from(vec![
             Line::from(vec![
                 Span::styled(
-                    "CCometixLine",
+                    "GLMCode",
                     Style::default()
                         .fg(Color::Cyan)
                         .add_modifier(Modifier::BOLD),
@@ -217,13 +217,13 @@ impl MainMenu {
             ]),
             Line::from(""),
             Line::from(Span::styled(
-                "High-performance Claude Code StatusLine Configuration",
+                "高性能 Claude Code 状态栏配置工具",
                 Style::default().fg(Color::Gray),
             )),
         ]);
 
         let header = Paragraph::new(header_text)
-            .block(Block::default().borders(Borders::ALL).title("Welcome"))
+            .block(Block::default().borders(Borders::ALL).title("欢迎"))
             .alignment(Alignment::Center)
             .wrap(Wrap { trim: true });
 
@@ -254,7 +254,7 @@ impl MainMenu {
             .block(
                 Block::default()
                     .borders(Borders::ALL)
-                    .title("Main Menu")
+                    .title("主菜单")
                     .title_style(Style::default().fg(Color::Green)),
             )
             .highlight_style(Style::default().bg(Color::Cyan).fg(Color::Black))
@@ -273,21 +273,21 @@ impl MainMenu {
                     .fg(Color::Yellow)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" Navigate  ", Style::default().fg(Color::Gray)),
+            Span::styled(" 导航  ", Style::default().fg(Color::Gray)),
             Span::styled(
                 "[Enter]",
                 Style::default()
                     .fg(Color::Yellow)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" Select  ", Style::default().fg(Color::Gray)),
+            Span::styled(" 选择  ", Style::default().fg(Color::Gray)),
             Span::styled(
                 "[Esc/Q]",
                 Style::default()
                     .fg(Color::Yellow)
                     .add_modifier(Modifier::BOLD),
             ),
-            Span::styled(" Exit", Style::default().fg(Color::Gray)),
+            Span::styled(" 退出", Style::default().fg(Color::Gray)),
         ])];
 
         // Add status message if present
@@ -305,7 +305,7 @@ impl MainMenu {
         }
 
         let footer = Paragraph::new(Text::from(footer_lines))
-            .block(Block::default().borders(Borders::ALL).title("Help"))
+            .block(Block::default().borders(Borders::ALL).title("帮助"))
             .alignment(Alignment::Center);
 
         f.render_widget(footer, main_layout[2]);
@@ -343,7 +343,7 @@ impl MainMenu {
             Line::from(""),
             Line::from(vec![
                 Span::styled(
-                    "CCometixLine ",
+                    "GLMCode ",
                     Style::default()
                         .fg(Color::Cyan)
                         .add_modifier(Modifier::BOLD),
@@ -356,21 +356,21 @@ impl MainMenu {
             ]),
             Line::from(""),
             Line::from(Span::styled(
-                "Features:",
+                "功能特性:",
                 Style::default()
                     .fg(Color::Green)
                     .add_modifier(Modifier::BOLD),
             )),
-            Line::from("• 🎨 TUI Configuration Interface"),
-            Line::from("• 🎯 Multiple Built-in Themes"),
-            Line::from("• ⚡ Real-time Usage Tracking"),
-            Line::from("• 💰 Cost Monitoring"),
-            Line::from("• 📊 Session Statistics"),
-            Line::from("• 🎨 Nerd Font Support"),
-            Line::from("• 🔧 Highly Customizable"),
+            Line::from("• 🎨 TUI 配置界面"),
+            Line::from("• 🎯 多种内置主题"),
+            Line::from("• ⚡ 实时用量追踪"),
+            Line::from("• 💰 费用监控"),
+            Line::from("• 📊 会话统计"),
+            Line::from("• 🎨 Nerd Font 支持"),
+            Line::from("• 🔧 高度可定制"),
             Line::from(""),
             Line::from(Span::styled(
-                "Press any key to continue...",
+                "按任意键继续...",
                 Style::default().fg(Color::Yellow),
             )),
         ]);
@@ -379,7 +379,7 @@ impl MainMenu {
             .block(
                 Block::default()
                     .borders(Borders::ALL)
-                    .title("About CCometixLine")
+                    .title("关于 GLMCode")
                     .title_style(
                         Style::default()
                             .fg(Color::Cyan)

@@ -127,35 +127,6 @@ pub fn context_window_segment() -> SegmentConfig {
     }
 }
 
-pub fn cost_segment() -> SegmentConfig {
-    SegmentConfig {
-        id: SegmentId::Cost,
-        enabled: false,
-        icon: IconConfig {
-            plain: "💰".to_string(),
-            nerd_font: "\u{eec1}".to_string(),
-        },
-        colors: ColorConfig {
-            icon: Some(AnsiColor::Rgb {
-                r: 229,
-                g: 192,
-                b: 123,
-            }),
-            text: Some(AnsiColor::Rgb {
-                r: 229,
-                g: 192,
-                b: 123,
-            }),
-            background: Some(AnsiColor::Rgb {
-                r: 40,
-                g: 44,
-                b: 52,
-            }), // Powerline dark background
-        },
-        styles: TextStyleConfig::default(),
-        options: HashMap::new(),
-    }
-}
 
 pub fn session_segment() -> SegmentConfig {
     SegmentConfig {
@@ -244,5 +215,35 @@ pub fn usage_segment() -> SegmentConfig {
             opts.insert("timeout".to_string(), serde_json::Value::Number(2.into()));
             opts
         },
+    }
+}
+
+pub fn glm_usage_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::GlmUsage,
+        enabled: false,
+        icon: IconConfig {
+            plain: "📊".to_string(),
+            nerd_font: "\u{f4a8}".to_string(),
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Rgb {
+                r: 180,
+                g: 142,
+                b: 173,
+            }),
+            text: Some(AnsiColor::Rgb {
+                r: 180,
+                g: 142,
+                b: 173,
+            }),
+            background: Some(AnsiColor::Rgb {
+                r: 55,
+                g: 60,
+                b: 72,
+            }), // Powerline dark background
+        },
+        styles: TextStyleConfig::default(),
+        options: HashMap::new(),
     }
 }

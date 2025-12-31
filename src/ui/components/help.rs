@@ -5,6 +5,7 @@ use ratatui::{
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
+use unicode_width::UnicodeWidthStr;
 
 #[derive(Default)]
 pub struct HelpComponent;
@@ -24,32 +25,32 @@ impl HelpComponent {
     ) {
         let help_items = if color_picker_open {
             vec![
-                ("[↑↓]", "Navigate"),
-                ("[Tab]", "Mode"),
-                ("[Enter]", "Select"),
-                ("[Esc]", "Cancel"),
+                ("[↑↓]", "导航"),
+                ("[Tab]", "模式"),
+                ("[Enter]", "选择"),
+                ("[Esc]", "取消"),
             ]
         } else if icon_selector_open {
             vec![
-                ("[↑↓]", "Navigate"),
-                ("[Tab]", "Style"),
-                ("[C]", "Custom"),
-                ("[Enter]", "Select"),
-                ("[Esc]", "Cancel"),
+                ("[↑↓]", "导航"),
+                ("[Tab]", "样式"),
+                ("[C]", "自定义"),
+                ("[Enter]", "选择"),
+                ("[Esc]", "取消"),
             ]
         } else {
             vec![
-                ("[Tab]", "Switch Panel"),
-                ("[Enter]", "Toggle/Edit"),
-                ("[Shift+↑↓]", "Reorder"),
-                ("[1-4]", "Theme"),
-                ("[P]", "Switch Theme"),
-                ("[R]", "Reset"),
-                ("[E]", "Edit Separator"),
-                ("[S]", "Save Config"),
-                ("[W]", "Write Theme"),
-                ("[Ctrl+S]", "Save Theme"),
-                ("[Esc]", "Quit"),
+                ("[Tab]", "切换面板"),
+                ("[Enter]", "开关/编辑"),
+                ("[Shift+↑↓]", "排序"),
+                ("[1-4]", "主题"),
+                ("[P]", "切换主题"),
+                ("[R]", "重置"),
+                ("[E]", "编辑分隔符"),
+                ("[S]", "保存配置"),
+                ("[W]", "写入主题"),
+                ("[Ctrl+S]", "另存主题"),
+                ("[Esc]", "退出"),
             ]
         };
 
@@ -62,8 +63,8 @@ impl HelpComponent {
         let mut current_width = 0usize;
 
         for (i, (key, description)) in help_items.iter().enumerate() {
-            // Calculate item display width
-            let item_width = key.chars().count() + description.chars().count() + 1; // +1 for space
+            // Calculate item display width using unicode width for proper CJK handling
+            let item_width = key.width() + description.width() + 1; // +1 for space
 
             // Add separator for non-first items on the same line
             let needs_separator = i > 0 && !current_line_spans.is_empty();
@@ -128,7 +129,7 @@ impl HelpComponent {
 
         let help_text = Text::from(lines);
         let help_paragraph = Paragraph::new(help_text)
-            .block(Block::default().borders(Borders::ALL).title("Help"))
+            .block(Block::default().borders(Borders::ALL).title("帮助"))
             .wrap(ratatui::widgets::Wrap { trim: false });
         f.render_widget(help_paragraph, area);
     }
