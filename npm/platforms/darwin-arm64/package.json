@@ -1,5 +1,5 @@
 {
-  "name": "@chenxiangc/glmcode-darwin-arm64",
+  "name": "@kiritoko1029/glmcode-darwin-arm64",
   "version": "0.0.0",
   "description": "macOS ARM64 binary for GLMCode",
   "files": ["glmcode"],

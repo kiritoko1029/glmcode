@@ -1,5 +1,5 @@
 {
-  "name": "@chenxiangc/glmcode-win32-x64",
+  "name": "@kiritoko1029/glmcode-win32-x64",
   "version": "0.0.0",
   "description": "Windows x64 binary for GLMCode",
   "files": ["glmcode.exe"],

@@ -1,5 +1,5 @@
 {
-  "name": "@chenxiangc/glmcode-linux-x64",
+  "name": "@kiritoko1029/glmcode-linux-x64",
   "version": "0.0.0",
   "description": "Linux x64 binary for GLMCode",
   "files": ["glmcode"],

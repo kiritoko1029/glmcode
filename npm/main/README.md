@@ -1,11 +1,11 @@
-# @chenxiangc/glmcode
+# @kiritoko1029/glmcode
 
 GLMCode - High-performance Claude Code StatusLine tool
 
 ## Installation
 
 ```bash
-npm install -g @chenxiangc/glmcode
+npm install -g @kiritoko1029/glmcode
 ```
 
 ## Features
@@ -32,7 +32,7 @@ glmcode --version
 Use npm mirror for faster installation:
 
 ```bash
-npm install -g @chenxiangc/glmcode --registry https://registry.npmmirror.com
+npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 ```
 
 ## More Information
