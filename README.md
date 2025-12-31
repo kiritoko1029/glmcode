@@ -1,4 +1,4 @@
-# CCometixLine
+# glmcode
 
 [English](README.md) | [中文](README.zh.md)
 
@@ -9,7 +9,7 @@ A high-performance Claude Code statusline tool written in Rust with Git integrat
 
 ## Screenshots
 
-![CCometixLine](assets/img1.png)
+![glmcode](assets/img1.png)
 
 The statusline shows: Model | Directory | Git Branch Status | Context Window Information
 
@@ -169,7 +169,7 @@ Move-Item "ccline.exe" "$env:USERPROFILE\.claude\ccline\"
 
 ```bash
 git clone https://github.com/kiritoko1029/glmcode.git
-cd CCometixLine
+cd glmcode
 cargo build --release
 
 # Linux/macOS
@@ -246,7 +246,7 @@ Token usage percentage based on transcript analysis with context limit tracking.
 
 ## Configuration
 
-CCometixLine supports full configuration via TOML files and interactive TUI:
+glmcode supports full configuration via TOML files and interactive TUI:
 
 - **Configuration file**: `~/.claude/ccline/config.toml`
 - **Interactive TUI**: `glmcode --config` for real-time editing with preview
@@ -297,6 +297,14 @@ cargo build --release
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
 
+## Acknowledgments
+
+This project is based on [CCometixLine](https://github.com/Haleclipse/CCometixLine) by [Haleclipse](https://github.com/Haleclipse). Special thanks to:
+
+- **[Haleclipse](https://github.com/Haleclipse)** for creating [CCometixLine](https://github.com/Haleclipse/CCometixLine), the original project that glmcode is built upon
+- **[byebye-code](https://github.com/byebye-code/byebyecode)** for implementation insights and reference
+- **[zai-org](https://github.com/zai-org/zai-coding-plugins)** for providing related interfaces and APIs
+
 ## Related Projects
 
 - [tweakcc](https://github.com/Piebald-AI/tweakcc) - Command-line tool to customize your Claude Code themes, thinking verbs, and more.
@@ -307,4 +315,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Haleclipse/CCometixLine&type=Date)](https://star-history.com/#Haleclipse/CCometixLine&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=kiritoko1029/glmcode&type=Date)](https://star-history.com/#kiritoko1029/glmcode&Date)
