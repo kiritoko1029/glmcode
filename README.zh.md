@@ -58,9 +58,9 @@ npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 ```
 
 安装后：
-- ✅ 全局命令 `ccline` 可在任何地方使用
+- ✅ 全局命令 `glmcode` 可在任何地方使用
 - ⚙️ 按照下方提示进行配置以集成到 Claude Code
-- 🎨 运行 `ccline -c` 打开配置面板进行主题选择
+- 🎨 运行 `glmcode -c` 打开配置面板进行主题选择
 
 ### Claude Code 配置
 
@@ -71,7 +71,7 @@ npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 {
   "statusLine": {
     "type": "command", 
-    "command": "~/.claude/ccline/ccline",
+    "command": "~/.claude/glmcode/glmcode",
     "padding": 0
   }
 }
@@ -82,7 +82,7 @@ npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 {
   "statusLine": {
     "type": "command", 
-    "command": "%USERPROFILE%\\.claude\\ccline\\ccline.exe",
+    "command": "%USERPROFILE%\\.claude\\glmcode\\glmcode.exe",
     "padding": 0
   }
 }
@@ -93,7 +93,7 @@ npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 {
   "statusLine": {
     "type": "command", 
-    "command": "ccline",
+    "command": "glmcode",
     "padding": 0
   }
 }
@@ -115,52 +115,52 @@ npm update -g @kiritoko1029/glmcode
 
 #### 选项 1: 动态链接版本（推荐）
 ```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-linux-x64.tar.gz
-tar -xzf ccline-linux-x64.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-linux-x64.tar.gz
+tar -xzf glmcode-linux-x64.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 *系统要求: Ubuntu 22.04+, CentOS 9+, Debian 11+, RHEL 9+ (glibc 2.35+)*
 
 #### 选项 2: 静态链接版本（通用兼容）
 ```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-linux-x64-static.tar.gz
-tar -xzf ccline-linux-x64-static.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-linux-x64-static.tar.gz
+tar -xzf glmcode-linux-x64-static.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 *适用于任何 Linux 发行版（静态链接，无依赖）*
 
 #### macOS (Intel)
 
 ```bash  
-mkdir -p ~/.claude/ccline
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-macos-x64.tar.gz
-tar -xzf ccline-macos-x64.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-macos-x64.tar.gz
+tar -xzf glmcode-macos-x64.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 
 #### macOS (Apple Silicon)
 
 ```bash
-mkdir -p ~/.claude/ccline  
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-macos-arm64.tar.gz
-tar -xzf ccline-macos-arm64.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode  
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-macos-arm64.tar.gz
+tar -xzf glmcode-macos-arm64.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 
 #### Windows
 
 ```powershell
 # 创建目录并下载
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\ccline"
-Invoke-WebRequest -Uri "https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-windows-x64.zip" -OutFile "ccline-windows-x64.zip"
-Expand-Archive -Path "ccline-windows-x64.zip" -DestinationPath "."
-Move-Item "ccline.exe" "$env:USERPROFILE\.claude\ccline\"
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\glmcode"
+Invoke-WebRequest -Uri "https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-windows-x64.zip" -OutFile "glmcode-windows-x64.zip"
+Expand-Archive -Path "glmcode-windows-x64.zip" -DestinationPath "."
+Move-Item "glmcode.exe" "$env:USERPROFILE\.claude\glmcode\"
 ```
 
 </details>
@@ -171,7 +171,7 @@ Move-Item "ccline.exe" "$env:USERPROFILE\.claude\ccline\"
 git clone https://github.com/kiritoko1029/glmcode.git
 cd glmcode
 cargo build --release
-cp target/release/ccometixline ~/.claude/ccline/ccline
+cp target/release/ccometixline ~/.claude/glmcode/glmcode
 ```
 
 ## 使用
@@ -180,40 +180,40 @@ cp target/release/ccometixline ~/.claude/ccline/ccline
 
 ```bash
 # 初始化配置文件
-ccline --init
+glmcode --init
 
 # 检查配置有效性  
-ccline --check
+glmcode --check
 
 # 打印当前配置
-ccline --print
+glmcode --print
 
 # 进入 TUI 配置模式
-ccline --config
+glmcode --config
 ```
 
 ### 主题覆盖
 
 ```bash
 # 临时使用指定主题（覆盖配置文件设置）
-ccline --theme cometix
-ccline --theme minimal
-ccline --theme gruvbox
-ccline --theme nord
-ccline --theme powerline-dark
+glmcode --theme cometix
+glmcode --theme minimal
+glmcode --theme gruvbox
+glmcode --theme nord
+glmcode --theme powerline-dark
 
-# 或使用 ~/.claude/ccline/themes/ 目录下的自定义主题
-ccline --theme my-custom-theme
+# 或使用 ~/.claude/glmcode/themes/ 目录下的自定义主题
+glmcode --theme my-custom-theme
 ```
 
 ### Claude Code 增强
 
 ```bash
 # 禁用上下文警告并启用详细模式
-ccline --patch /path/to/claude-code/cli.js
+glmcode --patch /path/to/claude-code/cli.js
 
 # 常见安装路径示例
-ccline --patch ~/.local/share/fnm/node-versions/v24.4.1/installation/lib/node_modules/@anthropic-ai/claude-code/cli.js
+glmcode --patch ~/.local/share/fnm/node-versions/v24.4.1/installation/lib/node_modules/@anthropic-ai/claude-code/cli.js
 ```
 
 ## 默认段落
@@ -240,10 +240,10 @@ ccline --patch ~/.local/share/fnm/node-versions/v24.4.1/installation/lib/node_mo
 
 CCometixLine 支持通过 TOML 文件和交互式 TUI 进行完整配置：
 
-- **配置文件**: `~/.claude/ccline/config.toml`
-- **交互式 TUI**: `ccline --config` 实时编辑配置并预览效果
-- **主题文件**: `~/.claude/ccline/themes/*.toml` 自定义主题文件
-- **自动初始化**: `ccline --init` 创建默认配置
+- **配置文件**: `~/.claude/glmcode/config.toml`
+- **交互式 TUI**: `glmcode --config` 实时编辑配置并预览效果
+- **主题文件**: `~/.claude/glmcode/themes/*.toml` 自定义主题文件
+- **自动初始化**: `glmcode --init` 创建默认配置
 
 ### 可用段落
 

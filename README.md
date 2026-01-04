@@ -58,9 +58,9 @@ npm install -g @kiritoko1029/glmcode --registry https://registry.npmmirror.com
 ```
 
 After installation:
-- ✅ Global command `ccline` is available everywhere
+- ✅ Global command `glmcode` is available everywhere
 - ⚙️ Follow the configuration steps below to integrate with Claude Code
-- 🎨 Run `ccline -c` to open configuration panel for theme selection
+- 🎨 Run `glmcode -c` to open configuration panel for theme selection
 
 ### Claude Code Configuration
 
@@ -71,7 +71,7 @@ Add to your Claude Code `settings.json`:
 {
   "statusLine": {
     "type": "command", 
-    "command": "~/.claude/ccline/ccline",
+    "command": "~/.claude/glmcode/glmcode",
     "padding": 0
   }
 }
@@ -82,7 +82,7 @@ Add to your Claude Code `settings.json`:
 {
   "statusLine": {
     "type": "command", 
-    "command": "%USERPROFILE%\\.claude\\ccline\\ccline.exe",
+    "command": "%USERPROFILE%\\.claude\\glmcode\\glmcode.exe",
     "padding": 0
   }
 }
@@ -93,7 +93,7 @@ Add to your Claude Code `settings.json`:
 {
   "statusLine": {
     "type": "command", 
-    "command": "ccline",
+    "command": "glmcode",
     "padding": 0
   }
 }
@@ -115,52 +115,52 @@ Alternatively, download from [Releases](https://github.com/kiritoko1029/glmcode/
 
 #### Option 1: Dynamic Binary (Recommended)
 ```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-linux-x64.tar.gz
-tar -xzf ccline-linux-x64.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-linux-x64.tar.gz
+tar -xzf glmcode-linux-x64.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 *Requires: Ubuntu 22.04+, CentOS 9+, Debian 11+, RHEL 9+ (glibc 2.35+)*
 
 #### Option 2: Static Binary (Universal Compatibility)
 ```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-linux-x64-static.tar.gz
-tar -xzf ccline-linux-x64-static.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-linux-x64-static.tar.gz
+tar -xzf glmcode-linux-x64-static.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 *Works on any Linux distribution (static, no dependencies)*
 
 #### macOS (Intel)
 
 ```bash  
-mkdir -p ~/.claude/ccline
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-macos-x64.tar.gz
-tar -xzf ccline-macos-x64.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-macos-x64.tar.gz
+tar -xzf glmcode-macos-x64.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 
 #### macOS (Apple Silicon)
 
 ```bash
-mkdir -p ~/.claude/ccline  
-wget https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-macos-arm64.tar.gz
-tar -xzf ccline-macos-arm64.tar.gz
-cp ccline ~/.claude/ccline/
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode  
+wget https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-macos-arm64.tar.gz
+tar -xzf glmcode-macos-arm64.tar.gz
+cp glmcode ~/.claude/glmcode/
+chmod +x ~/.claude/glmcode/glmcode
 ```
 
 #### Windows
 
 ```powershell
 # Create directory and download
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\ccline"
-Invoke-WebRequest -Uri "https://github.com/kiritoko1029/glmcode/releases/latest/download/ccline-windows-x64.zip" -OutFile "ccline-windows-x64.zip"
-Expand-Archive -Path "ccline-windows-x64.zip" -DestinationPath "."
-Move-Item "ccline.exe" "$env:USERPROFILE\.claude\ccline\"
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\glmcode"
+Invoke-WebRequest -Uri "https://github.com/kiritoko1029/glmcode/releases/latest/download/glmcode-windows-x64.zip" -OutFile "glmcode-windows-x64.zip"
+Expand-Archive -Path "glmcode-windows-x64.zip" -DestinationPath "."
+Move-Item "glmcode.exe" "$env:USERPROFILE\.claude\glmcode\"
 ```
 
 </details>
@@ -173,13 +173,13 @@ cd glmcode
 cargo build --release
 
 # Linux/macOS
-mkdir -p ~/.claude/ccline
-cp target/release/ccometixline ~/.claude/ccline/ccline
-chmod +x ~/.claude/ccline/ccline
+mkdir -p ~/.claude/glmcode
+cp target/release/ccometixline ~/.claude/glmcode/glmcode
+chmod +x ~/.claude/glmcode/glmcode
 
 # Windows (PowerShell)
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\ccline"
-copy target\release\ccometixline.exe "$env:USERPROFILE\.claude\ccline\ccline.exe"
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\glmcode"
+copy target\release\ccometixline.exe "$env:USERPROFILE\.claude\glmcode\glmcode.exe"
 ```
 
 ## Usage
@@ -210,7 +210,7 @@ glmcode --theme gruvbox
 glmcode --theme nord
 glmcode --theme powerline-dark
 
-# Or use custom theme files from ~/.claude/ccline/themes/
+# Or use custom theme files from ~/.claude/glmcode/themes/
 glmcode --theme my-custom-theme
 ```
 
@@ -248,9 +248,9 @@ Token usage percentage based on transcript analysis with context limit tracking.
 
 glmcode supports full configuration via TOML files and interactive TUI:
 
-- **Configuration file**: `~/.claude/ccline/config.toml`
+- **Configuration file**: `~/.claude/glmcode/config.toml`
 - **Interactive TUI**: `glmcode --config` for real-time editing with preview
-- **Theme files**: `~/.claude/ccline/themes/*.toml` for custom themes
+- **Theme files**: `~/.claude/glmcode/themes/*.toml` for custom themes
 - **Automatic initialization**: `glmcode --init` creates default configuration
 
 ### Available Segments
