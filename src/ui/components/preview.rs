@@ -186,6 +186,17 @@ impl PreviewComponent {
                         map
                     },
                 },
+                SegmentId::DecodeSpeed => SegmentData {
+                    primary: "Pro →82t/s ▂▄▅▆▇".to_string(),
+                    secondary: String::new(),
+                    metadata: {
+                        let mut map = HashMap::new();
+                        map.insert("plan".to_string(), "Pro".to_string());
+                        map.insert("current_speed".to_string(), "82.0".to_string());
+                        map.insert("sparkline".to_string(), "▂▄▅▆▇".to_string());
+                        map
+                    },
+                },
             };
 
             segments_data.push((segment_config.clone(), mock_data));

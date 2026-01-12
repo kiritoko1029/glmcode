@@ -88,6 +88,13 @@ impl GlmApiConfig {
         let base = format!("{}://{}", parsed.scheme(), parsed.host().unwrap());
         format!("{}/api/monitor/usage/quota/limit", base)
     }
+
+    /// 构建模型性能 URL
+    pub fn model_performance_url(&self) -> String {
+        let parsed = url::Url::parse(&self.base_url).unwrap();
+        let base = format!("{}://{}", parsed.scheme(), parsed.host().unwrap());
+        format!("{}/api/monitor/usage/model-performance", base)
+    }
 }
 
 /// GLM quota limit 数据
@@ -247,4 +254,101 @@ pub fn format_reset_time(reset_timestamp_ms: i64) -> String {
     } else {
         format!("{}s", diff_sec)
     }
+}
+
+/// GLM 模型性能数据
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct GlmModelPerformance {
+    pub x_time: Vec<String>,
+    pub lite_decode_speed: Vec<f64>,
+    pub pro_max_decode_speed: Vec<f64>,
+    pub lite_success_rate: Vec<f64>,
+    pub pro_max_success_rate: Vec<f64>,
+}
+
+/// 查询 GLM 模型性能
+pub fn fetch_glm_model_performance(
+    config: &GlmApiConfig,
+    hours: i64,
+) -> Result<GlmModelPerformance, Box<dyn std::error::Error>> {
+    use reqwest::blocking::Client;
+    use std::time::Duration;
+
+    let client = Client::builder()
+        .timeout(Duration::from_secs(10))
+        .user_agent("glmcode/1.0.0")
+        .build()?;
+
+    // 计算时间范围：过去 N 小时
+    let now = chrono::Local::now();
+    let end_time = now.format("%Y-%m-%d %H:%M:%S").to_string();
+    let start_time = (now - chrono::Duration::hours(hours))
+        .format("%Y-%m-%d %H:%M:%S")
+        .to_string();
+
+    let url = format!(
+        "{}?startTime={}&endTime={}",
+        config.model_performance_url(),
+        urlencoding::encode(&start_time),
+        urlencoding::encode(&end_time)
+    );
+
+    let response = client
+        .get(&url)
+        .header("Authorization", &config.auth_token)
+        .header("Accept-Language", "en-US,en")
+        .header("Content-Type", "application/json")
+        .send()?;
+
+    if !response.status().is_success() {
+        return Err(format!("GLM Model Performance API request failed: {}", response.status()).into());
+    }
+
+    let response_text = response.text()?;
+    let json: serde_json::Value = serde_json::from_str(&response_text)?;
+
+    // Debug: 输出原始 JSON 响应（仅在开发模式下）
+    #[cfg(debug_assertions)]
+    eprintln!("[DEBUG] GLM Model Performance API Response: {}", serde_json::to_string_pretty(&json).unwrap_or_default());
+
+    let performance_data = extract_model_performance_data(&json)?;
+
+    Ok(performance_data)
+}
+
+/// 从 JSON 响应中提取模型性能数据
+fn extract_model_performance_data(
+    json: &serde_json::Value,
+) -> Result<GlmModelPerformance, Box<dyn std::error::Error>> {
+    // 尝试获取顶层数据对象：json.data 或 json 本身
+    let data_obj = json.get("data").unwrap_or(json);
+
+    // 解析各个字段
+    let x_time: Vec<String> = serde_json::from_value(
+        data_obj.get("x_time").ok_or("Missing 'x_time' field")?.clone()
+    )?;
+
+    let lite_decode_speed: Vec<f64> = serde_json::from_value(
+        data_obj.get("liteDecodeSpeed").ok_or("Missing 'liteDecodeSpeed' field")?.clone()
+    )?;
+
+    let pro_max_decode_speed: Vec<f64> = serde_json::from_value(
+        data_obj.get("proMaxDecodeSpeed").ok_or("Missing 'proMaxDecodeSpeed' field")?.clone()
+    )?;
+
+    let lite_success_rate: Vec<f64> = serde_json::from_value(
+        data_obj.get("liteSuccessRate").ok_or("Missing 'liteSuccessRate' field")?.clone()
+    )?;
+
+    let pro_max_success_rate: Vec<f64> = serde_json::from_value(
+        data_obj.get("proMaxSuccessRate").ok_or("Missing 'proMaxSuccessRate' field")?.clone()
+    )?;
+
+    Ok(GlmModelPerformance {
+        x_time,
+        lite_decode_speed,
+        pro_max_decode_speed,
+        lite_success_rate,
+        pro_max_success_rate,
+    })
 }

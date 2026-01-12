@@ -73,6 +73,7 @@ pub enum SegmentId {
     OutputStyle,
     Update,
     GlmUsage,
+    DecodeSpeed,
 }
 
 // Legacy compatibility structure

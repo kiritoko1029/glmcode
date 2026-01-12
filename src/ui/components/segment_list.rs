@@ -57,6 +57,7 @@ impl SegmentListComponent {
                     SegmentId::OutputStyle => "输出样式",
                     SegmentId::Update => "更新",
                     SegmentId::GlmUsage => "GLM用量",
+                    SegmentId::DecodeSpeed => "解码速度",
                 };
 
                 if is_selected {

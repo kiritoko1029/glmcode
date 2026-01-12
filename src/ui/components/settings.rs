@@ -36,6 +36,7 @@ impl SettingsComponent {
                 SegmentId::OutputStyle => "输出样式",
                 SegmentId::Update => "更新",
                 SegmentId::GlmUsage => "GLM用量",
+                SegmentId::DecodeSpeed => "解码速度",
             };
             let current_icon = match config.style.mode {
                 StyleMode::Plain => &segment.icon.plain,

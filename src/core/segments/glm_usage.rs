@@ -6,26 +6,6 @@ use std::collections::HashMap;
 /// ANSI 重置代码
 const RESET: &str = "\x1b[0m";
 
-/// 根据套餐类型获取背景色（柔和色调）
-fn get_plan_background_color(plan: GlmPlan) -> &'static str {
-    match plan {
-        GlmPlan::Lite => "\x1b[48;5;114m",  // 柔和绿背景
-        GlmPlan::Pro => "\x1b[48;5;179m",   // 柔和黄/橙背景
-        GlmPlan::Max => "\x1b[48;5;167m",   // 柔和红背景
-        GlmPlan::Unknown => "\x1b[48;5;245m", // 灰色背景
-    }
-}
-
-/// 根据套餐类型获取文字颜色
-fn get_plan_text_color(plan: GlmPlan) -> &'static str {
-    match plan {
-        GlmPlan::Lite => "\x1b[38;5;0m",    // 黑色文字（配浅背景）
-        GlmPlan::Pro => "\x1b[38;5;0m",     // 黑色文字
-        GlmPlan::Max => "\x1b[38;5;255m",   // 白色文字（配深背景）
-        GlmPlan::Unknown => "\x1b[38;5;255m", // 白色文字
-    }
-}
-
 /// 根据百分比获取状态色（柔和色调）
 fn get_status_color(percentage: f64) -> &'static str {
     if percentage <= 50.0 {
@@ -97,14 +77,11 @@ impl super::Segment for GlmUsageSegment {
             let percentage = tokens.percentage;
             metadata.insert("tokens_percentage".to_string(), format!("{:.1}", percentage));
 
-            // 识别套餐类型
-            let plan = if let Some(usage) = tokens.usage {
+            // 识别套餐类型（仅记录在 metadata 中）
+            if let Some(usage) = tokens.usage {
                 let detected_plan = GlmPlan::from_token_usage(usage);
                 metadata.insert("plan".to_string(), detected_plan.name().to_string());
-                Some(detected_plan)
-            } else {
-                None
-            };
+            }
 
             // 生成进度条（10格）
             let bar_length = 10;
@@ -129,21 +106,9 @@ impl super::Segment for GlmUsageSegment {
                 String::new()
             };
 
-            // 构建显示文本：平台名 [套餐] 进度条 百分比 重置时间
-            // 使用带背景色的文字显示套餐类型
-            let plan_str = if let Some(p) = plan {
-                let bg_color = get_plan_background_color(p);
-                let text_color = get_plan_text_color(p);
-                let plan_name = p.display_name();
-                format!("{}{}{}{}", bg_color, text_color, plan_name, RESET)
-            } else {
-                String::new()
-            };
-
+            // 构建显示文本：进度条 百分比 重置时间
             let primary = format!(
-                "{}{}  {} {}{}",
-                platform_name,
-                plan_str,
+                "{} {}{}",
                 progress_bar,
                 format_percentage(percentage),
                 reset_time_str

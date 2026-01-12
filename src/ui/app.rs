@@ -506,6 +506,7 @@ impl App {
                         SegmentId::OutputStyle => "输出样式",
                         SegmentId::Update => "更新",
                         SegmentId::GlmUsage => "GLM用量",
+                        SegmentId::DecodeSpeed => "解码速度",
                     };
                     let is_enabled = segment.enabled;
                     self.status_message = Some(format!(
@@ -533,6 +534,7 @@ impl App {
                                 SegmentId::OutputStyle => "输出样式",
                                 SegmentId::Update => "更新",
                                 SegmentId::GlmUsage => "GLM用量",
+                                SegmentId::DecodeSpeed => "解码速度",
                             };
                             let is_enabled = segment.enabled;
                             self.status_message = Some(format!(

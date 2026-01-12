@@ -163,3 +163,21 @@ pub fn glm_usage_segment() -> SegmentConfig {
     }
 }
 
+pub fn decode_speed_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::DecodeSpeed,
+        enabled: false,
+        icon: IconConfig {
+            plain: "⚡".to_string(),
+            nerd_font: "⚡".to_string(), // Lightning (U+26A1) - 更通用的闪电符号
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Color16 { c16: 214 }), // Orange
+            text: Some(AnsiColor::Color16 { c16: 214 }),
+            background: None,
+        },
+        styles: TextStyleConfig::default(),
+        options: HashMap::new(),
+    }
+}
+

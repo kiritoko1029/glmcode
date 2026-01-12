@@ -510,6 +510,10 @@ pub fn collect_all_segments(
                 let segment = GlmUsageSegment::new();
                 segment.collect(input)
             }
+            crate::config::SegmentId::DecodeSpeed => {
+                let segment = DecodeSpeedSegment::new();
+                segment.collect(input)
+            }
         };
 
         if let Some(data) = segment_data {

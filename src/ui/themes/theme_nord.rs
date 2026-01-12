@@ -247,3 +247,21 @@ pub fn glm_usage_segment() -> SegmentConfig {
         options: HashMap::new(),
     }
 }
+
+pub fn decode_speed_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::DecodeSpeed,
+        enabled: false,
+        icon: IconConfig {
+            plain: "⚡".to_string(),
+            nerd_font: "⚡".to_string(),
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Rgb { r: 208, g: 135, b: 112 }), // Nord orange
+            text: Some(AnsiColor::Rgb { r: 208, g: 135, b: 112 }),
+            background: None,
+        },
+        styles: TextStyleConfig::default(),
+        options: HashMap::new(),
+    }
+}

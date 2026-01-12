@@ -36,6 +36,7 @@ let platform;
 let modelUsageUrl;
 let toolUsageUrl;
 let quotaLimitUrl;
+let modelPerformanceUrl;
 
 // Extract the base domain from ANTHROPIC_BASE_URL
 const parsedBaseUrl = new URL(baseUrl);
@@ -46,11 +47,13 @@ if (baseUrl.includes('api.z.ai')) {
   modelUsageUrl = `${baseDomain}/api/monitor/usage/model-usage`;
   toolUsageUrl = `${baseDomain}/api/monitor/usage/tool-usage`;
   quotaLimitUrl = `${baseDomain}/api/monitor/usage/quota/limit`;
+  modelPerformanceUrl = `${baseDomain}/api/monitor/usage/model-performance`;
 } else if (baseUrl.includes('open.bigmodel.cn') || baseUrl.includes('dev.bigmodel.cn')) {
   platform = 'ZHIPU';
   modelUsageUrl = `${baseDomain}/api/monitor/usage/model-usage`;
   toolUsageUrl = `${baseDomain}/api/monitor/usage/tool-usage`;
   quotaLimitUrl = `${baseDomain}/api/monitor/usage/quota/limit`;
+  modelPerformanceUrl = `${baseDomain}/api/monitor/usage/model-performance`;
 } else {
   console.error('Error: Unrecognized ANTHROPIC_BASE_URL:', baseUrl);
   console.error('');
@@ -230,6 +233,7 @@ const run = async () => {
   await queryUsage(modelUsageUrl, 'Model usage');
   await queryUsage(toolUsageUrl, 'Tool usage');
   await queryUsage(quotaLimitUrl, 'Quota limit', false, processQuotaLimit);
+  await queryUsage(modelPerformanceUrl, 'Model performance');
 };
 
 run().catch((error) => {

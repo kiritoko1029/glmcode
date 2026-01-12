@@ -1,4 +1,5 @@
 pub mod context_window;
+pub mod decode_speed;
 pub mod directory;
 pub mod git;
 pub mod glm_usage;
@@ -26,6 +27,7 @@ pub struct SegmentData {
 
 // Re-export all segment types
 pub use context_window::ContextWindowSegment;
+pub use decode_speed::DecodeSpeedSegment;
 pub use directory::DirectorySegment;
 pub use git::GitSegment;
 pub use glm_usage::GlmUsageSegment;

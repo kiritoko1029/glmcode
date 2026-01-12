@@ -163,3 +163,21 @@ pub fn glm_usage_segment() -> SegmentConfig {
         options: HashMap::new(),
     }
 }
+
+pub fn decode_speed_segment() -> SegmentConfig {
+    SegmentConfig {
+        id: SegmentId::DecodeSpeed,
+        enabled: false,
+        icon: IconConfig {
+            plain: "⚡".to_string(),
+            nerd_font: "⚡".to_string(),
+        },
+        colors: ColorConfig {
+            icon: Some(AnsiColor::Color16 { c16: 3 }),
+            text: Some(AnsiColor::Color16 { c16: 3 }),
+            background: None,
+        },
+        styles: TextStyleConfig::default(),
+        options: HashMap::new(),
+    }
+}
