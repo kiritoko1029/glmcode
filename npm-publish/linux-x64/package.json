@@ -1,0 +1,20 @@
+{
+  "name": "@chenxiangc/glmcode-linux-x64",
+  "version": "1.0.10",
+  "description": "Linux x64 binary for GLMCode",
+  "files": [
+    "glmcode"
+  ],
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiritoko1029/glmcode"
+  },
+  "author": "chenxiangc",
+  "license": "MIT"
+}

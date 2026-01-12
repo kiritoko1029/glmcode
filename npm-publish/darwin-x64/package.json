@@ -1,0 +1,20 @@
+{
+  "name": "@chenxiangc/glmcode-darwin-x64",
+  "version": "1.0.10",
+  "description": "macOS x64 binary for GLMCode",
+  "files": [
+    "glmcode"
+  ],
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiritoko1029/glmcode"
+  },
+  "author": "chenxiangc",
+  "license": "MIT"
+}

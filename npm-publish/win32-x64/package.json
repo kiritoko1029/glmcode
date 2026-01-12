@@ -1,0 +1,20 @@
+{
+  "name": "@chenxiangc/glmcode-win32-x64",
+  "version": "1.0.10",
+  "description": "Windows x64 binary for GLMCode",
+  "files": [
+    "glmcode.exe"
+  ],
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiritoko1029/glmcode"
+  },
+  "author": "chenxiangc",
+  "license": "MIT"
+}

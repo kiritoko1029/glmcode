@@ -1,0 +1,35 @@
+{
+  "name": "@chenxiangc/glmcode",
+  "version": "1.0.10",
+  "description": "GLMCode - Claude Code StatusLine with GLM usage tracking",
+  "bin": {
+    "glmcode": "./bin/glmcode.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "optionalDependencies": {
+    "@chenxiangc/glmcode-darwin-x64": "1.0.10",
+    "@chenxiangc/glmcode-darwin-arm64": "1.0.10",
+    "@chenxiangc/glmcode-linux-x64": "1.0.10",
+    "@chenxiangc/glmcode-linux-x64-musl": "1.0.10",
+    "@chenxiangc/glmcode-win32-x64": "1.0.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiritoko1029/glmcode"
+  },
+  "keywords": [
+    "claude",
+    "statusline",
+    "claude-code",
+    "glm",
+    "rust",
+    "cli"
+  ],
+  "author": "chenxiangc",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
